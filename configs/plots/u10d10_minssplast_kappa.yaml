@@ -1,0 +1,40 @@
+name: u10d10_minssplast_kappa
+description: "MINSSPLAST Cohen's kappa vs feature count (U=D=10), by reservoir method"
+
+data:
+  source: store
+  filter:
+    U: 10
+    D: 10
+    target_method: [MINSSPLAST]
+    reservoir_method: [DECSSP, INPUT, ELM, NGRC]
+    metric_name: [value_kappa_mean]
+  query: "use_size == 10 * reservoir_size"  # experiment1's use_size directive; excludes experiment2's use_size scan at the same reservoir_size
+
+plot:
+  type: line
+  x: reservoir_size
+  x_scale: log
+  x_label: "number of features"
+  y_label: "Kappa"
+  hue: reservoir_method
+  ylim: [0, 1]
+  colors:
+    DECSSP: red
+    ELM: blue
+    NGRC: green
+    INPUT: darkgoldenrod
+  markers:
+    DECSSP: "*"
+  marker_sizes:
+    DECSSP: 14
+    ELM: 8
+    NGRC: 8
+    INPUT: 8
+  tick_fontsize: 14
+  label_fontsize: 20
+  legend_fontsize: 14
+  legend_loc: "lower right"
+  grid: true
+
+output: data/plots/u10d10_minssplast_kappa.svg

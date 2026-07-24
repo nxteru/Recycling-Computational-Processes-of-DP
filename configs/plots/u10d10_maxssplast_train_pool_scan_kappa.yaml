@@ -1,0 +1,37 @@
+name: u10d10_maxssplast_train_pool_scan_kappa
+description: >
+  MAXSSPLAST Cohen's kappa vs use_size/reservoir_size (U=D=10), one line
+  per (reservoir_method, reservoir_size); each method is one color family,
+  shaded lighter to darker by feature count.
+
+data:
+  source: store
+  filter:
+    U: 10
+    D: 10
+    target_method: [MAXSSPLAST]
+    reservoir_method: [DECSSP, INPUT, ELM, NGRC]
+    metric_name: [value_kappa_mean]
+
+plot:
+  type: line
+  x: {ratio: [use_size, reservoir_size]}
+  x_scale: log
+  x_label: "T_train/number of features"
+  y_label: "Kappa"
+  hue: reservoir_method
+  shade: reservoir_size
+  ylim: [0, 1]
+  colors:
+    DECSSP: red
+    ELM: blue
+    NGRC: green
+    INPUT: darkgoldenrod
+  tick_fontsize: 14
+  label_fontsize: 20
+  legend_fontsize: 12
+  legend_loc: "outside right"
+  grid: true
+  figsize: [8, 5]
+
+output: data/plots/u10d10_maxssplast_train_pool_scan_kappa.svg

@@ -1,0 +1,32 @@
+name: u10d10_ud_scan_minssplast_kappa
+description: "MINSSPLAST Cohen's kappa heatmap over U x D, one panel per reservoir method (INPUT, ELM, NGRC, DECSSP)"
+
+data:
+  source: store
+  filter:
+    target_method: [MINSSPLAST]
+    reservoir_method: [INPUT, ELM, NGRC, DECSSP]
+    metric_name: [value_kappa_mean]
+    test_size: [5000]  # excludes experiment1/2/4's cached rows at their shared U=10,D=10 cell (they use test_size=2000)
+
+plot:
+  type: heatmap
+  x: D
+  y: U
+  facet_col: reservoir_method
+  facet_col_order: [INPUT, ELM, NGRC, DECSSP]
+  vlim: [0, 1]
+  cmap: turbo
+  square: true
+  share_y: true
+  panel_titles: true
+  panel_title_fontsize: 17
+  panel_title_weight: bold
+  xtick_rotation: 45
+  colorbar_label: "Kappa"
+  tick_fontsize: 13
+  label_fontsize: 18
+  colorbar_tick_fontsize: 16
+  colorbar_label_fontsize: 20
+
+output: data/plots/u10d10_ud_scan_minssplast_kappa.svg

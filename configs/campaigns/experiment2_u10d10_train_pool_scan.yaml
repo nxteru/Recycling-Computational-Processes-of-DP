@@ -1,0 +1,57 @@
+# U=D=10 fixed. DECSSP/INPUT/ELM/NGRC reservoirs against MAXSSPLAST/MINSSPLAST.
+#
+# Same reservoir_size sweep as experiment1_u10d10_last_targets.
+# train_pool_size (60060) is hard-coded at 20x the widest sweep point
+# (NGRC degree 5 = 3003 features) for the same reason as there.
+#
+# use_size sweeps 1/8x..64x each leaf's own reservoir_size; leaves whose
+# resolved use_size would exceed train_pool_size (e.g. NGRC degree 5 at
+# 32x/64x) are dropped by pipeline/grid.py's _resolve_use_size_directive
+# rather than erroring, so this grid can request all 10 multipliers
+# uniformly and let the ones that don't fit fall away on their own.
+#
+# DECSSPLAST is included in target_method only because MAXSSPLAST/MINSSPLAST
+# need it as their "existence" classifier (pipeline/constants.py
+# EXISTENCE_DEP); it is not part of the requested experiment.
+name: experiment2_u10d10_train_pool_scan
+description: >
+  U=D=10, train_pool_size=60060, test_size=2000. DECSSP/INPUT/ELM/NGRC
+  reservoirs against MAXSSPLAST/MINSSPLAST. ELM sweeps 1/16x..4x DECSSP's
+  feature count (551); NGRC sweeps degree 2..5; use_size sweeps
+  1/8x..64x each leaf's own feature count, dropping combinations that
+  would exceed train_pool_size.
+input_method: UNIFORM
+stages: [input, target, reservoir, regression, experiment]
+
+fixed:
+  U: 10
+  D: 10
+  train_pool_size: 60060
+  test_size: 2000
+
+grid:
+  target_method: [DECSSPLAST, MAXSSPLAST, MINSSPLAST]
+  reservoir_method: [DECSSP, INPUT, ELM, NGRC]
+  use_size:
+    - {times_reservoir_size: 0.125}   # 1/8x
+    - {times_reservoir_size: 0.25}    # 1/4x
+    - {times_reservoir_size: 0.5}     # 1/2x
+    - {times_reservoir_size: 1}
+    - {times_reservoir_size: 2}
+    - {times_reservoir_size: 4}
+    - {times_reservoir_size: 8}
+    - {times_reservoir_size: 16}
+    - {times_reservoir_size: 32}
+    - {times_reservoir_size: 64}
+    - {times_reservoir_size: 100}
+
+overrides:
+  reservoir_method:
+    ELM:
+      reservoir_size: [2204, 1102, 551, 276, 138, 69, 34]
+    NGRC:
+      reservoir_size: [{ngrc_degree: 2}, {ngrc_degree: 3}, {ngrc_degree: 4}, {ngrc_degree: 5}]
+
+visualize:
+  - u10d10_maxssplast_train_pool_scan_kappa
+  - u10d10_minssplast_train_pool_scan_kappa

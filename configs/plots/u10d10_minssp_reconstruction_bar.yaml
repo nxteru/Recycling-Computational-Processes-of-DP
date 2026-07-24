@@ -1,0 +1,35 @@
+name: u10d10_minssp_reconstruction_bar
+description: "MINSSP reconstruction accuracy vs n, one panel per reservoir method (INPUT, ELM, NGRC, DECSSP), U=D=10"
+
+data:
+  source: raw_result_multi
+  target_method: MINSSP
+  U: 10
+  D: 10
+  metric: reconstruction_accuracy_by_cell
+  panels:
+    - reservoir_method: INPUT
+      reservoir_size: 11
+      use_size: 110
+    - reservoir_method: ELM
+      reservoir_size: 551
+      use_size: 5510
+    - reservoir_method: NGRC
+      reservoir_size: 1001
+      use_size: 10010
+    - reservoir_method: DECSSP
+      reservoir_size: 551
+      use_size: 5510
+
+plot:
+  type: bar
+  ylim: [0, 1]
+  ylabel: "Accuracy"
+  square: true
+  share_y: true
+  panel_title_fontsize: 22
+  panel_title_weight: bold
+  tick_fontsize: 18
+  label_fontsize: 22
+
+output: data/plots/u10d10_minssp_reconstruction_bar.svg

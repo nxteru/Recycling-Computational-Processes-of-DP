@@ -1,0 +1,7 @@
+# Shared defaults for all campaigns. A campaign's own `fixed:` section
+# overrides these keys.
+input_method: UNIFORM
+
+fixed:
+  train_pool_size: 20000   # rows generated for the training pool; use_size <= this
+  test_size: 2000

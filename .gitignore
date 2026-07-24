@@ -1,0 +1,11 @@
+# Python venv
+.venv/
+__pycache__/
+*.pyc
+
+# All generated data lives under data/, none of it is tracked
+data/
+
+# Run logs
+logs/
+tmp/

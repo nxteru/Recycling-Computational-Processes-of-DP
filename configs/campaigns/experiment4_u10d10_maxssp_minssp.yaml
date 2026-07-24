@@ -1,0 +1,38 @@
+# U=D=10 fixed. DECSSP/INPUT/ELM/NGRC reservoirs (each at its default
+# feature count) against MAXSSP/MINSSP -- the full (non-LAST) targets, so
+# experiment results include the greedy-tour reconstruction check.
+#
+# reservoir_size is left at each method's default (ELM matches DECSSP;
+# NGRC uses the lowest degree exceeding DECSSP): DECSSP and ELM both
+# resolve to 551 features, INPUT to 11, NGRC to degree 4 (1001 features).
+#
+# DECSSP is included in target_method only because MAXSSP/MINSSP each need
+# it as their "existence" classifier (pipeline/constants.py EXISTENCE_DEP);
+# it is not part of the requested experiment.
+name: experiment4_u10d10_maxssp_minssp
+description: >
+  U=D=10, train_pool_size = 10x the max default feature count (DECSSP/
+  INPUT/ELM/NGRC each at its default), test_size=2000. DECSSP/INPUT/ELM/
+  NGRC reservoirs against MAXSSP/MINSSP, use_size = 10x each leaf's own
+  reservoir_size.
+input_method: UNIFORM
+stages: [input, target, reservoir, regression, experiment]
+
+fixed:
+  U: 10
+  D: 10
+  train_pool_size: {times_max_reservoir_size: 10}
+  test_size: 2000
+  use_size: {times_reservoir_size: 10}
+
+grid:
+  target_method: [DECSSP, MAXSSP, MINSSP]
+  reservoir_method: [DECSSP, INPUT, ELM, NGRC]
+
+# 2 plot types (reconstruction-vs-n bar, value-accuracy colormap) x 2
+# targets = 4 figures; each holds all 4 methods as side-by-side panels.
+visualize:
+  - u10d10_maxssp_reconstruction_bar
+  - u10d10_maxssp_value_colormap
+  - u10d10_minssp_reconstruction_bar
+  - u10d10_minssp_value_colormap

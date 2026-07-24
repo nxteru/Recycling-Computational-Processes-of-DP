@@ -1,0 +1,40 @@
+name: u10d10_maxssp_value_colormap
+description: "MAXSSP value-prediction accuracy per task, one panel per reservoir method (INPUT, ELM, NGRC, DECSSP), U=D=10"
+
+data:
+  source: raw_result_multi
+  target_method: MAXSSP
+  U: 10
+  D: 10
+  metric: value_accuracy_by_cell
+  panels:
+    - reservoir_method: INPUT
+      reservoir_size: 11
+      use_size: 110
+    - reservoir_method: ELM
+      reservoir_size: 551
+      use_size: 5510
+    - reservoir_method: NGRC
+      reservoir_size: 1001
+      use_size: 10010
+    - reservoir_method: DECSSP
+      reservoir_size: 551
+      use_size: 5510
+
+plot:
+  type: colormap
+  vlim: [0.5, 1.0]
+  cmap: turbo
+  square: true
+  share_y: true
+  panel_title_fontsize: 22
+  panel_title_weight: bold
+  tick_fontsize: 13
+  label_fontsize: 20
+  colorbar_label: "Accuracy"
+  colorbar_label_fontsize: 20
+  colorbar_tick_fontsize: 16
+  colorbar_shrink: 1.0
+  colorbar_aspect: 12
+
+output: data/plots/u10d10_maxssp_value_colormap.svg

@@ -1,0 +1,40 @@
+# U=D=10 fixed. DECSSP/INPUT/ELM/NGRC reservoirs against MAXSSPLAST/MINSSPLAST.
+#
+# train_pool_size (30030) is hard-coded at 10x the widest sweep point
+# (NGRC degree 5 = 3003 features), not {times_max_reservoir_size: 10} --
+# that directive uses each method's *default* size, which is smaller than
+# what this campaign's ELM/NGRC sweeps actually reach.
+#
+# DECSSPLAST is included in target_method only because MAXSSPLAST/MINSSPLAST
+# need it as their "existence" classifier (pipeline/constants.py
+# EXISTENCE_DEP); it is not part of the requested experiment.
+name: experiment1_u10d10_last_targets
+description: >
+  U=D=10, train_pool_size=30030, test_size=2000. DECSSP/INPUT/ELM/NGRC
+  reservoirs against MAXSSPLAST/MINSSPLAST, use_size = 10x each leaf's own
+  feature count. ELM sweeps 1/16x..4x DECSSP's feature count (551); NGRC
+  sweeps degree 2..5.
+input_method: UNIFORM
+stages: [input, target, reservoir, regression, experiment]
+
+fixed:
+  U: 10
+  D: 10
+  train_pool_size: 30030
+  test_size: 2000
+  use_size: {times_reservoir_size: 10}
+
+grid:
+  target_method: [DECSSPLAST, MAXSSPLAST, MINSSPLAST]
+  reservoir_method: [DECSSP, INPUT, ELM, NGRC]
+
+overrides:
+  reservoir_method:
+    ELM:
+      reservoir_size: [2204, 1102, 551, 276, 138, 69, 34]
+    NGRC:
+      reservoir_size: [{ngrc_degree: 2}, {ngrc_degree: 3}, {ngrc_degree: 4}, {ngrc_degree: 5}]
+
+visualize:
+  - u10d10_maxssplast_kappa
+  - u10d10_minssplast_kappa

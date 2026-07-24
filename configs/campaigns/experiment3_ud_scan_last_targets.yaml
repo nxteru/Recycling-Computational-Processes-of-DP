@@ -1,0 +1,60 @@
+# DECSSP/INPUT/ELM/NGRC reservoirs against MAXSSPLAST/MINSSPLAST, scanning
+# U, D over {2,4,...,20}^2 = 100 combinations.
+#
+# reservoir_size is left at each method's default for DECSSP/INPUT/ELM
+# (ELM matches DECSSP). NGRC is overridden below to use the degree whose
+# feature count is nearest to DECSSP's, rather than its own default (the
+# lowest degree exceeding DECSSP's).
+#
+# train_pool_size = {times_max_reservoir_size: 10}: 10x the largest
+# feature count any method actually resolves to at that (U, D) --
+# DECSSP/ELM or NGRC depending on (U, D), since NGRC is overridden to the
+# nearest-not-just-exceeding degree below -- so DECSSP/INPUT/ELM/NGRC
+# share one training pool per (U, D) instead of each sizing its own from
+# a smaller feature count.
+#
+# test_size is fixed at 5000 rather than derived from train_pool_size, so
+# every (U, D) cell evaluates against the same test set size.
+#
+# DECSSPLAST is included in target_method only because MAXSSPLAST/MINSSPLAST
+# need it as their "existence" classifier (pipeline/constants.py
+# EXISTENCE_DEP); it is not part of the requested experiment.
+#
+# Peak cost is at U=D=20: train_pool_size=42,010 (10x DECSSP/ELM's 4,201
+# features, the widest point in the grid).
+name: experiment3_ud_scan_last_targets
+description: >
+  U, D in {2,4,...,20}^2. DECSSP/INPUT/ELM/NGRC reservoirs against
+  MAXSSPLAST/MINSSPLAST. DECSSP/INPUT/ELM at their default feature count;
+  NGRC at the degree nearest DECSSP's feature count. train_pool_size =
+  10x the max feature count any method actually resolves to at each
+  (U, D); test_size = 5000 (fixed); use_size = 10x each leaf's own
+  reservoir_size.
+input_method: UNIFORM
+stages: [input, target, reservoir, regression, experiment]
+
+fixed:
+  train_pool_size: {times_max_reservoir_size: 10}
+  test_size: 5000
+  use_size: {times_reservoir_size: 10}
+
+grid:
+  U: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+  D: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+  target_method: [DECSSPLAST, MAXSSPLAST, MINSSPLAST]
+  reservoir_method: [DECSSP, INPUT, ELM, NGRC]
+
+overrides:
+  reservoir_method:
+    NGRC:
+      reservoir_size: [{ngrc_degree_nearest: "DECSSP"}]
+
+# 3 heatmaps (kappa, accuracy, worst-cell accuracy) x 2 targets = 6
+# figures; each holds all 4 methods as side-by-side panels.
+visualize:
+  - u10d10_ud_scan_maxssplast_kappa
+  - u10d10_ud_scan_maxssplast_accuracy
+  - u10d10_ud_scan_maxssplast_worst_accuracy
+  - u10d10_ud_scan_minssplast_kappa
+  - u10d10_ud_scan_minssplast_accuracy
+  - u10d10_ud_scan_minssplast_worst_accuracy
