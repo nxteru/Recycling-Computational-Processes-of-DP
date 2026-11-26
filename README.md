@@ -1,4 +1,4 @@
-# Recycling-Compuational-Processes-of-DP
+# Recycling-Computational-Processes-of-DP
 
 Code for the subset-sum problem (SSP) experiments in:
 
